@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// Each client application that wants to use "Login with OmniStack"
+model Client {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  name          String      // e.g., "SnapFood Customer", "SnapFood Courier"
+  clientId      String      @unique  // Public identifier
+  clientSecret  String      // Private key
+  redirectUrls  String[]    // Allowed callback URLs
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  userLogins    UserLogin[]
+  tokens        Token[]
+  authCodes     AuthCode[]
+}
+
+// Tracks where users are logged in
+model UserLogin {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   // Supabase user ID
+  clientId  String   @db.ObjectId
+  lastLogin DateTime @default(now())
+  client    Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, clientId])
+}
+
+// Temporary auth codes during OAuth flow
+model AuthCode {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  code      String   @unique
+  clientId  String   @db.ObjectId
+  userId    String   // Supabase user ID
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  client    Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+}
+
+// Active access tokens
+model Token {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  token     String   @unique
+  clientId  String   @db.ObjectId
+  userId    String   // Supabase user ID
+  expiresAt DateTime
+  client    Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+}
