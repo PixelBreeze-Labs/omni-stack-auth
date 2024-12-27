@@ -8,7 +8,7 @@ export async function GET() {
             name: "Test App",
             clientId: "test_" + crypto.randomBytes(8).toString('hex'),
             clientSecret: crypto.randomBytes(32).toString('hex'),
-            redirectUrls: ["http://localhost:3000/test/callback"]
+            redirectUrls: ["https://auth.omnistack.xyz/test/callback"]
         }
     })
 

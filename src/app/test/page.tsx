@@ -23,7 +23,7 @@ export default function TestPage() {
 
         const url = `/api/auth/authorize?${new URLSearchParams({
             client_id: clientId,
-            redirect_uri: 'http://localhost:3000/test/callback'
+            redirect_uri: 'https://auth.omnistack.xyz/test/callback'
         })}`
 
         window.location.href = url
