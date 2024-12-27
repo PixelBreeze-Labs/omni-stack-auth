@@ -1,6 +1,6 @@
 // src/app/api/auth/userinfo/route.ts
 import { prisma } from '@/lib/prisma'
-import {supabaseAdmin} from "@/app/lib/supabase";
+import {supabaseAdmin} from "@/lib/supabase";
 export async function GET(req: Request) {
     try {
         const authHeader = req.headers.get('authorization')

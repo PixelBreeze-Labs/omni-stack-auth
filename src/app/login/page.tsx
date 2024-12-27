@@ -1,11 +1,10 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 
-export default function LoginPage() {
-    const router = useRouter()
+function LoginPageContent() {
     const searchParams = useSearchParams()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -18,8 +17,8 @@ export default function LoginPage() {
 
         try {
             // Get the auth params first
-            const clientId = new URLSearchParams(window.location.search).get('client_id');
-            const redirectUri = new URLSearchParams(window.location.search).get('redirect_uri');
+            const clientId = searchParams.get('client_id')
+            const redirectUri = searchParams.get('redirect_uri')
 
             console.log("Auth params:", { clientId, redirectUri }); // Debug
 
@@ -36,15 +35,11 @@ export default function LoginPage() {
             }
 
             if (data.session) {
-                // Get the correct URL parameters from searchParams (Next.js)
-                const clientId = searchParams.get('client_id');
-                const redirectUri = searchParams.get('redirect_uri');
-
                 // Success - force redirect to authorize
                 const authUrl = `/api/auth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri!)}`;
                 window.location.replace(authUrl);
             }
-        } catch (err: any) {
+        } catch (err) {
             console.error("Login error:", err);
             setError(err.message);
             setLoading(false);
@@ -108,5 +103,24 @@ export default function LoginPage() {
                 </form>
             </div>
         </div>
+    )
+}
+
+// Wrap the content in Suspense boundary for client-side rendering
+export default function LoginPage() {
+    const [isClient, setIsClient] = useState(false)
+
+    useEffect(() => {
+        setIsClient(true)
+    }, [])
+
+    if (!isClient) {
+        return null // Don't render until client-side
+    }
+
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <LoginPageContent />
+        </Suspense>
     )
 }

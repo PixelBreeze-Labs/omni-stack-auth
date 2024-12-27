@@ -1,5 +1,4 @@
 // src/app/api/auth/authorize/route.ts
-import { cookies } from 'next/headers'
 import { supabase } from '@/lib/supabase'
 import { prisma } from '@/lib/prisma'
 import { redirect } from 'next/navigation'
@@ -25,7 +24,6 @@ export async function GET(req: Request) {
     }
 
     // Check if user is logged in with Supabase
-    const cookieStore = cookies()
     const { data: { session } } = await supabase.auth.getSession()
 
     if (!session) {

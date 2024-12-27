@@ -1,12 +1,12 @@
-// src/app/test/callback/page.tsx
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 
-export default function CallbackPage() {
+function CallbackPageContent() {
     const [token, setToken] = useState('')
     const [userInfo, setUserInfo] = useState(null)
-    const [credentials, setCredentials] = useState<any>(null)
+    const [credentials, setCredentials] = useState(null)
+
     const searchParams = useSearchParams()
 
     useEffect(() => {
@@ -76,5 +76,24 @@ export default function CallbackPage() {
                 </div>
             )}
         </div>
+    )
+}
+
+// Wrap the content in Suspense boundary for client-side rendering
+export default function CallbackPage() {
+    const [isClient, setIsClient] = useState(false)
+
+    useEffect(() => {
+        setIsClient(true)
+    }, [])
+
+    if (!isClient) {
+        return null // Don't render until client-side
+    }
+
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <CallbackPageContent />
+        </Suspense>
     )
 }
