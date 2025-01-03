@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build:package": "cd src/packages/omnistack-auth && npm install && npm run build",
+    "link:package": "npm install ./src/packages/omnistack-auth",
+    "build": "npm run build:package && npm run link:package && prisma generate && next build",
     "start": "next start",
     "lint": "next lint"
   },
