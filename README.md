@@ -1,36 +1,123 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# OmniStack Auth
 
-## Getting Started
+Universal authentication provider for modern web applications, offering a seamless "Login with OmniStack" experience similar to social logins.
 
-First, run the development server:
+## Features
 
+- 🔒 **Secure by Default**: Built with security best practices and OAuth 2.0 compliance
+- 🎨 **Beautiful UI**: Pre-built components that match your brand
+- 🚀 **Easy Integration**: Simple API for quick implementation
+- 📱 **Responsive**: Works perfectly on all devices
+- 🌍 **Framework Agnostic**: Use with any modern framework
+
+## Quick Start
+
+1. Install the package:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install @omnistack/auth
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Add the login button:
+```typescript
+import { LoginButton } from '@omnistack/auth'
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+function App() {
+  return (
+    <LoginButton
+      clientId="your_client_id"
+      redirectUri="your_callback_url"
+      onSuccess={(data) => {
+        console.log(data.user, data.token)
+      }}
+    />
+  )
+}
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project Structure
 
-## Learn More
+```
+omnistack-auth/
+├── src/
+│   ├── app/           # Next.js app
+│   │   ├── page.tsx   # Landing page
+│   │   ├── docs/      # Documentation
+│   │   └── playground/# Testing playground
+│   ├── components/    # Shared components
+│   │   └── auth/      # Auth components
+│   └── lib/          # Utilities
+└── packages/
+    └── omnistack-auth/# NPM package
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Environment Variables
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```env
+# Application
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_APP_DOMAIN=https://auth.omnistack.com
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Database
+DATABASE_URL=mongodb://localhost:27017/omnistack-auth
 
-## Deploy on Vercel
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_SERVICE_KEY=your_service_key
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Security
+JWT_SECRET=your_jwt_secret
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Development
+
+1. Clone and install:
+```bash
+git clone https://github.com/PixelBreeze-Labs/omni-stack-auth.git
+cd omnistack-auth
+npm install
+```
+
+2. Start MongoDB:
+```bash
+mongod --dbpath /usr/local/var/mongodb
+```
+
+3. Run the development server:
+```bash
+npm run dev
+```
+
+4. Visit the playground:
+    * Open http://localhost:3000/playground
+    * Test both direct and package integrations
+
+## Documentation
+
+Visit our documentation for:
+* Detailed integration guides
+* Component API references
+* Best practices
+* Examples
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## Roadmap
+
+* Social login providers
+* Multi-factor authentication
+* Enterprise SSO
+* Mobile SDKs
+* Analytics dashboard
+* Rate limiting
+* Subscription management
+
+## License
+
+MIT © [OmniStack]
