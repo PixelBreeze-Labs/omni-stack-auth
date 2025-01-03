@@ -11,10 +11,12 @@
   "dependencies": {
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
+    "@omnistack/auth": "file:src/packages/omnistack-auth",
     "@prisma/client": "^6.1.0",
     "@supabase/supabase-js": "^2.47.10",
     "framer-motion": "^11.15.0",
     "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.469.0",
     "next": "15.1.3",
     "next-navigation": "^1.0.6",
     "react": "^19.0.0",

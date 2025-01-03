@@ -1,19 +1,19 @@
-// packages/omnistack-auth/src/components/AuthModal.tsx
+// src/components/auth/AuthModal.tsx
 'use client'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { motion } from 'framer-motion'
+import { supabase } from '@/lib/supabase'
 
 interface AuthModalProps {
     isOpen: boolean
     onClose: () => void
     clientId: string
     redirectUri: string
-    onSuccess?: (data: { token: string; user: any }) => void
 }
 
-export function AuthModal({ isOpen, onClose, clientId, redirectUri, onSuccess }: AuthModalProps) {
+export function AuthModal({ isOpen, onClose, clientId, redirectUri }: AuthModalProps) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
@@ -25,24 +25,17 @@ export function AuthModal({ isOpen, onClose, clientId, redirectUri, onSuccess }:
         setError('')
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_APP_DOMAIN}/api/auth/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    email: email.trim(),
-                    password: password.trim(),
-                    clientId,
-                    redirectUri
-                })
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: email.trim(),
+                password: password.trim()
             })
 
-            const data = await response.json()
+            if (error) throw error
 
-            if (!response.ok) throw new Error(data.error)
-
-            if (data.token) {
-                onSuccess?.(data)
-                onClose()
+            if (data.session) {
+                await new Promise(resolve => setTimeout(resolve, 100))
+                const authUrl = `/api/auth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}`
+                window.location.replace(authUrl)
             }
         } catch (err: any) {
             setError(err.message)

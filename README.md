@@ -1,14 +1,24 @@
 # OmniStack Auth
 
-## Overview
-OmniStack Auth provides a unified authentication solution that can be integrated into any application, similar to "Sign in with Google" or "Sign in with GitHub". It consists of two parts:
-1. Auth Provider (this project)
-2. Client Package (@omnistack/auth)
+Universal authentication provider for modern web applications, offering a seamless "Login with OmniStack" experience similar to social logins.
 
-## Direct Integration
+## Features
 
+- 🔒 **Secure by Default**: Built with security best practices and OAuth 2.0 compliance
+- 🎨 **Beautiful UI**: Pre-built components that match your brand
+- 🚀 **Easy Integration**: Simple API for quick implementation
+- 📱 **Responsive**: Works perfectly on all devices
+- 🌍 **Framework Agnostic**: Use with any modern framework
+
+## Quick Start
+
+1. Install the package:
+```bash
+npm install @omnistack/auth
+```
+
+2. Add the login button:
 ```typescript
-// Method 1: Using the LoginButton component
 import { LoginButton } from '@omnistack/auth'
 
 function App() {
@@ -16,39 +26,34 @@ function App() {
     <LoginButton
       clientId="your_client_id"
       redirectUri="your_callback_url"
-      mode="light" // or "dark"
-      size="md" // "sm" | "md" | "lg"
-      onLoginSuccess={(data) => {
-        console.log(data.token, data.user)
-      }}
-    />
-  )
-}
-
-// Method 2: Using the AuthModal directly
-import { AuthModal } from '@omnistack/auth'
-
-function App() {
-  const [isOpen, setIsOpen] = useState(false)
-  
-  return (
-    <AuthModal
-      isOpen={isOpen}
-      onClose={() => setIsOpen(false)}
-      clientId="your_client_id"
-      redirectUri="your_callback_url"
       onSuccess={(data) => {
-        console.log(data.token, data.user)
+        console.log(data.user, data.token)
       }}
     />
   )
 }
 ```
 
-## Environment Setup
+## Project Structure
+
+```
+omnistack-auth/
+├── src/
+│   ├── app/           # Next.js app
+│   │   ├── page.tsx   # Landing page
+│   │   ├── docs/      # Documentation
+│   │   └── playground/# Testing playground
+│   ├── components/    # Shared components
+│   │   └── auth/      # Auth components
+│   └── lib/          # Utilities
+└── packages/
+    └── omnistack-auth/# NPM package
+```
+
+## Environment Variables
 
 ```env
-# Core URLs
+# Application
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 NEXT_PUBLIC_APP_DOMAIN=https://auth.omnistack.com
 
@@ -64,123 +69,55 @@ SUPABASE_SERVICE_KEY=your_service_key
 JWT_SECRET=your_jwt_secret
 ```
 
-## Missing Features & Next Steps
+## Development
 
-### 1. User Management
-- User registration flow
-- Password reset functionality
-- Email verification
-- Multi-factor authentication
-- User profile management
-
-### 2. Security Enhancements
-- Rate limiting
-- CSRF protection
-- IP blocking
-- Suspicious activity detection
-- Session management
-- Token refresh mechanism
-
-### 3. Admin Dashboard
-- Client application management
-- User management interface
-- Analytics and usage statistics
-- Audit logs
-- Client credentials management
-
-### 4. Developer Experience
-- Better error handling
-- Comprehensive logging
-- SDK documentation
-- Integration examples
-- TypeScript improvements
-- Testing suite
-
-### 5. Infrastructure
-- Deployment configuration
-- CI/CD pipeline
-- Monitoring setup
-- Backup strategy
-- Scaling configuration
-
-### 6. Package Improvements
-- Dark mode support
-- Custom styling options
-- More button variants
-- Loading states
-- Error handling
-- Accessibility improvements
-- i18n support
-
-### 7. Integration Features
-- Social login providers
-- Enterprise SSO
-- SAML support
-- OpenID Connect compliance
-- OAuth 2.0 flows
-
-### 8. Client SDKs
-- React Native support
-- Vue.js support
-- Angular support
-- Mobile SDKs (iOS/Android)
-- Server-side SDKs
-
-### 9. Business Features
-- Usage tracking
-- Billing integration
-- API rate limiting
-- Client tiers
-- Subscription management
-
-### 10. Documentation
-- API documentation
-- Integration guides
-- Security best practices
-- Troubleshooting guide
-- Migration guides
-- SDK references
-- Example applications
-
-## Getting Started for Development
-
-1. Clone and Install:
+1. Clone and install:
 ```bash
-git clone https://github.com/your-org/omnistack-auth.git
+git clone https://github.com/PixelBreeze-Labs/omni-stack-auth.git
 cd omnistack-auth
 npm install
 ```
 
-2. Set up environment:
+2. Start MongoDB:
 ```bash
-cp .env.example .env.local
-# Edit .env.local with your values
-```
-
-3. Start MongoDB:
-```bash
-# Make sure MongoDB is running
 mongod --dbpath /usr/local/var/mongodb
 ```
 
-4. Run development server:
+3. Run the development server:
 ```bash
 npm run dev
 ```
 
-5. Test the integration:
-```bash
-# Visit http://localhost:3000/test
-# Register a test client
-# Try both direct and package integrations
-```
+4. Visit the playground:
+    * Open http://localhost:3000/playground
+    * Test both direct and package integrations
+
+## Documentation
+
+Visit our documentation for:
+* Detailed integration guides
+* Component API references
+* Best practices
+* Examples
 
 ## Contributing
+
 1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## Roadmap
+
+* Social login providers
+* Multi-factor authentication
+* Enterprise SSO
+* Mobile SDKs
+* Analytics dashboard
+* Rate limiting
+* Subscription management
 
 ## License
-MIT
+
+MIT © [OmniStack]

@@ -1,35 +1,36 @@
-export interface OAuthClient {
-    id: string
-    name: string
+// packages/omnistack-auth/src/types/index.ts
+export interface AuthConfig {
     clientId: string
-    clientSecret: string
-    redirectUrls: string[]
-}
-
-export interface UserLogin {
-    id: string
-    userId: string
-    clientId: string
-    lastLogin: Date
+    redirectUri: string
+    mode?: 'light' | 'dark'
+    size?: 'sm' | 'md' | 'lg'
+    className?: string
 }
 
 export interface AuthResponse {
-    access_token: string
-    token_type: string
-    expires_in: number
+    token: string
+    user: {
+        id: string
+        email: string
+        name?: string
+        picture?: string
+    }
 }
 
-export interface UserInfo {
-    id: string
-    email: string
-    name?: string
-    picture?: string
-    current_client: {
-        name: string
-        client_id: string
-    }
-    logins: {
-        client_name: string
-        last_login: string
-    }[]
+export interface OnSuccessData {
+    token: string
+    user: AuthResponse['user']
+}
+
+export interface AuthModalProps {
+    isOpen: boolean
+    onClose: () => void
+    clientId: string
+    redirectUri: string
+    onSuccess?: (data: OnSuccessData) => void
+}
+
+export interface LoginButtonProps extends AuthConfig {
+    children?: React.ReactNode
+    onLoginSuccess?: (data: OnSuccessData) => void
 }
