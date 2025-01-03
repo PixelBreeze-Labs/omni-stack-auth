@@ -1,36 +1,186 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# OmniStack Auth
 
-## Getting Started
+## Overview
+OmniStack Auth provides a unified authentication solution that can be integrated into any application, similar to "Sign in with Google" or "Sign in with GitHub". It consists of two parts:
+1. Auth Provider (this project)
+2. Client Package (@omnistack/auth)
 
-First, run the development server:
+## Direct Integration
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```typescript
+// Method 1: Using the LoginButton component
+import { LoginButton } from '@omnistack/auth'
+
+function App() {
+  return (
+    <LoginButton
+      clientId="your_client_id"
+      redirectUri="your_callback_url"
+      mode="light" // or "dark"
+      size="md" // "sm" | "md" | "lg"
+      onLoginSuccess={(data) => {
+        console.log(data.token, data.user)
+      }}
+    />
+  )
+}
+
+// Method 2: Using the AuthModal directly
+import { AuthModal } from '@omnistack/auth'
+
+function App() {
+  const [isOpen, setIsOpen] = useState(false)
+  
+  return (
+    <AuthModal
+      isOpen={isOpen}
+      onClose={() => setIsOpen(false)}
+      clientId="your_client_id"
+      redirectUri="your_callback_url"
+      onSuccess={(data) => {
+        console.log(data.token, data.user)
+      }}
+    />
+  )
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Environment Setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```env
+# Core URLs
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_APP_DOMAIN=https://auth.omnistack.com
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Database
+DATABASE_URL=mongodb://localhost:27017/omnistack-auth
 
-## Learn More
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_SERVICE_KEY=your_service_key
 
-To learn more about Next.js, take a look at the following resources:
+# Security
+JWT_SECRET=your_jwt_secret
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Missing Features & Next Steps
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 1. User Management
+- User registration flow
+- Password reset functionality
+- Email verification
+- Multi-factor authentication
+- User profile management
 
-## Deploy on Vercel
+### 2. Security Enhancements
+- Rate limiting
+- CSRF protection
+- IP blocking
+- Suspicious activity detection
+- Session management
+- Token refresh mechanism
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 3. Admin Dashboard
+- Client application management
+- User management interface
+- Analytics and usage statistics
+- Audit logs
+- Client credentials management
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 4. Developer Experience
+- Better error handling
+- Comprehensive logging
+- SDK documentation
+- Integration examples
+- TypeScript improvements
+- Testing suite
+
+### 5. Infrastructure
+- Deployment configuration
+- CI/CD pipeline
+- Monitoring setup
+- Backup strategy
+- Scaling configuration
+
+### 6. Package Improvements
+- Dark mode support
+- Custom styling options
+- More button variants
+- Loading states
+- Error handling
+- Accessibility improvements
+- i18n support
+
+### 7. Integration Features
+- Social login providers
+- Enterprise SSO
+- SAML support
+- OpenID Connect compliance
+- OAuth 2.0 flows
+
+### 8. Client SDKs
+- React Native support
+- Vue.js support
+- Angular support
+- Mobile SDKs (iOS/Android)
+- Server-side SDKs
+
+### 9. Business Features
+- Usage tracking
+- Billing integration
+- API rate limiting
+- Client tiers
+- Subscription management
+
+### 10. Documentation
+- API documentation
+- Integration guides
+- Security best practices
+- Troubleshooting guide
+- Migration guides
+- SDK references
+- Example applications
+
+## Getting Started for Development
+
+1. Clone and Install:
+```bash
+git clone https://github.com/your-org/omnistack-auth.git
+cd omnistack-auth
+npm install
+```
+
+2. Set up environment:
+```bash
+cp .env.example .env.local
+# Edit .env.local with your values
+```
+
+3. Start MongoDB:
+```bash
+# Make sure MongoDB is running
+mongod --dbpath /usr/local/var/mongodb
+```
+
+4. Run development server:
+```bash
+npm run dev
+```
+
+5. Test the integration:
+```bash
+# Visit http://localhost:3000/test
+# Register a test client
+# Try both direct and package integrations
+```
+
+## Contributing
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
+
+## License
+MIT

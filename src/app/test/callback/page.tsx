@@ -1,25 +1,21 @@
 'use client'
-import { useEffect, useState, Suspense } from 'react'
+import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 
-function CallbackPageContent() {
+export default function CallbackPage() {
     const [token, setToken] = useState('')
     const [userInfo, setUserInfo] = useState(null)
-    const [credentials, setCredentials] = useState(null)
-
     const searchParams = useSearchParams()
 
     useEffect(() => {
+        const code = searchParams.get('code')
+        if (!code) return
+
         // Get stored credentials
         const stored = localStorage.getItem('omnistack_test_credentials')
-        if (stored) {
-            setCredentials(JSON.parse(stored))
-        }
-    }, [])
+        if (!stored) return
 
-    useEffect(() => {
-        const code = searchParams.get('code')
-        if (!code || !credentials) return
+        const credentials = JSON.parse(stored)
 
         // Exchange code for token
         fetch('/api/auth/token', {
@@ -43,18 +39,9 @@ function CallbackPageContent() {
                 })
             })
             .then(r => r.json())
-            .then(data => setUserInfo(data))
+            .then(setUserInfo)
             .catch(console.error)
-    }, [searchParams, credentials])
-
-    if (!credentials) {
-        return (
-            <div className="p-8">
-                <h1 className="text-2xl font-bold mb-4">No credentials found</h1>
-                <p>Please go back and register a test client first.</p>
-            </div>
-        )
-    }
+    }, [searchParams])
 
     return (
         <div className="p-8">
@@ -63,37 +50,20 @@ function CallbackPageContent() {
             {token && (
                 <div className="mb-4">
                     <h2 className="font-bold">Access Token:</h2>
-                    <pre className="bg-gray-100 p-2 rounded">{token}</pre>
+                    <pre className="bg-gray-100 p-4 rounded overflow-auto">
+                        {token}
+                    </pre>
                 </div>
             )}
 
             {userInfo && (
                 <div>
                     <h2 className="font-bold">User Info:</h2>
-                    <pre className="bg-gray-100 p-2 rounded">
+                    <pre className="bg-gray-100 p-4 rounded overflow-auto">
                         {JSON.stringify(userInfo, null, 2)}
                     </pre>
                 </div>
             )}
         </div>
-    )
-}
-
-// Wrap the content in Suspense boundary for client-side rendering
-export default function CallbackPage() {
-    const [isClient, setIsClient] = useState(false)
-
-    useEffect(() => {
-        setIsClient(true)
-    }, [])
-
-    if (!isClient) {
-        return null // Don't render until client-side
-    }
-
-    return (
-        <Suspense fallback={<div>Loading...</div>}>
-            <CallbackPageContent />
-        </Suspense>
     )
 }
